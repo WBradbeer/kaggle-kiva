@@ -1,0 +1,47 @@
+---
+title: "Kiva Data Science for Good"
+output: html_notebook
+---
+
+# Kiva Data Science for Good
+
+## Abstract
+This anlaysis attempts to dig into the welfare level of Kiva borrowers around the world. This is done using a combination of Kiva loan data and external data sources.
+
+## Rough Work
+```{r}
+library(tidyverse)
+```
+
+
+Load all the data
+```{r}
+kiva_loans <- read_csv("kiva_loans.csv")
+kiva_mpi_region_locations <- read_csv("kiva_mpi_region_locations.csv")
+loan_theme_ids <- read_csv("loan_theme_ids.csv")
+loan_themes_by_region <- read_csv("loan_themes_by_region.csv")
+```
+
+Start exploring loan data
+```{r}
+summary(kiva_loans)
+```
+
+Interested in the differece between loan amount and funded amount
+```{r}
+kiva_loans %>% 
+  group_by(funded_amount == loan_amount) %>% 
+  summarise(count = n()) %>% 
+  mutate(percent = count/sum(count))
+  
+```
+Looks like most of the loans in this data set were fully funded.
+
+
+Look into missing data
+```{r}
+sapply(kiva_loans, function(x) sum(is.na(x)))
+```
+Most of the data is there. Not tags for everyone but that is fine.
+
+
